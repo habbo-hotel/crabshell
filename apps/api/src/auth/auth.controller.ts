@@ -19,18 +19,28 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() loginDto: AuthLoginDTO, @Res() reply: FastifyReply) {
-    const result: UserEntity = await this.authService.login(loginDto, reply);
+  async login(
+    @Body() loginDto: AuthLoginDTO,
+    @Req() request: FastifyRequest,
+    @Res() reply: FastifyReply,
+  ) {
+    const result: UserEntity = await this.authService.login(
+      loginDto,
+      request,
+      reply,
+    );
     return reply.send(UserDTO.fromEntity(result));
   }
 
   @Post('register')
   async register(
     @Body() registerDto: AuthRegisterDTO,
+    @Req() request: FastifyRequest,
     @Res() reply: FastifyReply,
   ) {
     const result: UserEntity = await this.authService.register(
       registerDto,
+      request,
       reply,
     );
     return reply.send(UserDTO.fromEntity(result));
